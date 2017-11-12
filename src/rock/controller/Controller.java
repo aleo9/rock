@@ -152,9 +152,103 @@ public class Controller{
     
     //count and apply scores of a round, then call to reset and call FXMLController to update.
     public void countScore(){
+        //rock = 1 paper = 2 scissor = 3      but 1 is supposed to be greater than 3.
+        int players = model.getPlayerCount();
+        int[] pick = new int[players];
+        int[] points = new int[players];
         
-        model.addScore(0, 2);
-        model.addScore(1, 1);
+        for(int i = 0; i<players; i++){
+            if(model.getPlayerChoice(i).equals("rock")){
+                pick[i] = 1;
+            }else if(model.getPlayerChoice(i).equals("paper")){
+                pick[i] = 2;
+            }else{
+                pick[i] = 3;
+            }
+        }
+        
+        if(players==2){
+            
+            if(pick[0]==pick[1]){
+                points[0] = 0;
+                points[1] = 0;
+            }else if(pick[0]>pick[1] && !(pick[0]==3 && pick[1]==1) || (pick[0]<pick[1] && (pick[0]==1 && pick[1]==3))){
+                //either pick 0 is larger and it's not true that pick 0 is 3 and pick 1 is 1.
+                //or pick 0 is lower, and it's true that both pick 0 = 1, and pick 1 = 3
+                //this means that pick 0 wins. Either by 3vs2, 2vs1 or 1vs3.
+                points[0] = 1;  
+                points[1] = 0;
+            }else{
+                //all cases of a tie has been eliminated
+                //all cases where pick 0 wins have also been eliminated
+                points[0] = 0;  
+                points[1] = 1; 
+            }
+            
+  
+        }else if(players == 3){
+            
+            
+            if(pick[0]==pick[1]){
+                if(pick[0]==pick[2]){
+                    //all is the same
+                points[0] = 0;  
+                points[1] = 0;  
+                points[2] = 0; 
+                }else if(pick[0]>pick[2] && !(pick[0]==3 && pick[2]==1) || (pick[0]==1 && pick[2]==3)){
+                    //pick 0 is larger AND the 3 vs 1 case is not true, or pick 0 is 1 and pick 2 is 3, means that pick 0 wins.
+                    //since pick 0 and pick 1 is the same, they both get 1 point.
+                points[0] = 1;  
+                points[1] = 1;  
+                points[2] = 0;                    
+                    
+                }else{
+                    //pick 2 wins, and they get 2 points since they beat both pick 0 and 1.
+                points[0] = 0;  
+                points[1] = 0;  
+                points[2] = 2; 
+                }
+            }else if(pick[0]==pick[2]){//pick 1 is different, others are the same.
+                   if(pick[0]>pick[1] && !(pick[0]==3 && pick[1]==1) || (pick[0]==1 && pick[1]==3)){
+                    //pick 0 is larger AND the 3 vs 1 case is not true, means that pick 0 wins.
+                    //since pick 0 and pick 2 is the same, they both get 1 point.
+                points[0] = 1;  
+                points[1] = 0;  
+                points[2] = 1;  
+                   }else{
+                points[0] = 0;  
+                points[1] = 2;  
+                points[2] = 0; 
+                   }
+                
+            }else if(pick[1]==pick[2]){//pick 0 is different, others are the same.
+                if(pick[0]>pick[1] && !(pick[0]==3 && pick[1]==1) || (pick[0]==1 && pick[1]==3)){
+                points[0] = 2;  
+                points[1] = 0;  
+                points[2] = 0;               
+                }else{
+                points[0] = 0;  
+                points[1] = 1;  
+                points[2] = 1; 
+                }
+            }else{//all are unequal
+                points[0] = 1;  
+                points[1] = 1;  
+                points[2] = 1; 
+            }
+            
+            
+        }
+        
+        for(int i = 0; i<players; i++){
+        model.addScore(i, points[i]);       
+        }
+
+        
+        //model.addScore(0, 2);
+        //model.addScore(1, 1);
+        
+        
         /*
         int players = model.getPlayerCount();
         String[] choice = new String[players];
@@ -169,13 +263,14 @@ public class Controller{
         }else if(choice[0].equals("rock") &&  choice[1]){
             score[0]
         }
-*/      
+        */      
         reset();
-        updater.newRound();
+        
     }
     
     private void reset(){
         model.resetPlayers();
+        updater.newRound();
     }
     
     public boolean haveAllInputs(){

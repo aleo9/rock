@@ -30,22 +30,25 @@ public class Net implements Runnable
         }
         
 	public int bind(int port){
-            int finalPort;
+            int finalPort = port;
             System.out.println("socket " +port);
-            try{
+            boolean foundPort = false;
+            int counter = 0;
+            while(!foundPort && counter<20){//counter that tests 20 ports, to prevent infinite loop.
+                
+                try{
 		this.socket = new DatagramSocket(port);
                 finalPort=port;
-                }
-            catch (SocketException e){
-                            finalPort=port;
-                            finalPort++;
-                            try{
-				this.socket = new DatagramSocket(finalPort);
-                            }catch (SocketException ee){
-                            System.out.println("socket failed to set again " +finalPort);
-                            }
-                                System.out.println("socket set at " +finalPort);
+                foundPort = true;
+                }            
+                catch (SocketException e){
+                            
 		}
+                port++;
+                counter++;
+                
+            }
+         
                 System.out.println("socket binded");
                 return finalPort;
 	}

@@ -13,7 +13,7 @@ public class Matchmaker implements Runnable{
     private DatagramSocket socket;
     private boolean running;
     int port = 999;
-    int playersPerGame = 2;
+    int playersPerGame = 3;
     
     public Matchmaker(){
     queuedPlayers = new LinkedList<>();
