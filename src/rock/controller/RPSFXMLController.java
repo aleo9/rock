@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.concurrent.*;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import rock.Updater;
 
@@ -25,6 +26,8 @@ import rock.Updater;
 public class RPSFXMLController implements Initializable, Updater {
     
     private static Controller controller;
+    @FXML
+    private AnchorPane rootPane;
     
     @FXML
     private Button rockButton;
@@ -60,7 +63,7 @@ public class RPSFXMLController implements Initializable, Updater {
     @FXML
     private void connect(ActionEvent ae){
     connectButton.setText("waiting");
-    
+    connectButton.setDisable(true);
     new ActionService("connect").start();
     }
     
@@ -96,14 +99,17 @@ public class RPSFXMLController implements Initializable, Updater {
         Platform.runLater(new Runnable() {
         @Override public void run() {
               
+            //some update message
+            //
+            
             p1score.setText(Integer.toString(controller.getScore(0)));
             p2score.setText(Integer.toString(controller.getScore(1)));
             
-            p1last.setText(Integer.toString(controller.getLastScore(0)));
-            p2last.setText(Integer.toString(controller.getLastScore(1)));
+            p1last.setText(Integer.toString(controller.getLastScore(0)) +" " +controller.getLastChoice(0));
+            p2last.setText(Integer.toString(controller.getLastScore(1)) +" " +controller.getLastChoice(1));
             if(controller.getPlayerCount()==3){
             p3score.setText(Integer.toString(controller.getScore(2)));
-            p3last.setText(Integer.toString(controller.getLastScore(2)));
+            p3last.setText(Integer.toString(controller.getLastScore(2)) +" " +controller.getLastChoice(2));
                 }
           
             }
@@ -118,11 +124,6 @@ public class RPSFXMLController implements Initializable, Updater {
         
     }
     
-    @FXML
-    private void setP2(ActionEvent ae){
-        controller.addScore(0, 1);
-        System.out.println(controller.getScore(0));
-    }
     
    
     private static class ActionService extends Service<Void> {
@@ -141,9 +142,9 @@ public class RPSFXMLController implements Initializable, Updater {
                 protected Void call() throws InterruptedException{
 
                     if(choice.equals("connect")){
+                        
                         try{
                         controller.connectToPlayers();
-                        
                         }catch(IOException e){
                         System.out.println("failed connecting");
                         }
@@ -172,13 +173,15 @@ public class RPSFXMLController implements Initializable, Updater {
         controller = new Controller();
         connectUpdaterInterface(controller);
         System.out.println("controller set");
+        disableButtons(true);
+        
         }catch(Exception e) {
              
                     }
-
+        new ActionService("connect").start();
+        
     }   
 
-    
     @Override
     public void connected(int players, int id){
         //implement view with right amount of players. Change name from player 1-3 to you
@@ -188,15 +191,16 @@ public class RPSFXMLController implements Initializable, Updater {
             p2name.setText("Me");
         }else if(id==2){
             p3name.setText("Me");
-        }else
+        }else{
+            
+        }
             
             if(players<3){
-                p3name.setDisable(true);
+                p3name.setText("");
                 p3score.setDisable(true);
                 p3last.setDisable(true);
             }
-        
-    
+            newRound();
     }
     @Override
     public void newRound(){

@@ -24,19 +24,12 @@ public class Controller{
     
     public Controller(){
        
-       model = new Model(); 
-       System.out.println("model set");
-       net = new Net();
-       giveNetAccess();
-       net.userPort = net.bind(net.userPort);
-       if(net.userPort != 1000){
-            //net.address = new InetSocketAddress("192.168.1.75", 1000);
-             //System.out.println("new userport " +net.userPort + " address port set to " +1000);
-                    
-        }
-                
-	net.start(); // Start Receive
-        System.out.println("net Started.");
+        model = new Model();
+       
+        net = new Net();
+        giveNetAccess();
+        net.bind();    
+        net.start(); // Start Receive
        
     }
     
@@ -95,7 +88,7 @@ public class Controller{
     
     //connect to server who then connects you to queued up players.
     public void connectToPlayers() throws IOException{
-        String message = "connect " +net.myIp +" " +net.userPort;
+        String message = "connect " +net.getMyIp() +" " +net.getMyPort();
         
         net.send(net.server, message);
         System.out.println("sent request");
@@ -121,6 +114,11 @@ public class Controller{
     return model.getLastPlayerScore(id);
     }
     
+    public String getLastChoice(int id){
+        
+    return model.getPlayerLastChoice(id);
+    }
+    
     
     //remove
     public void addScore(int id, int value){
@@ -128,7 +126,6 @@ public class Controller{
     }
     
     public void sendInput(String choice) throws IOException{
-        System.out.println("attempts sending input");
         
         //message format - pick playerid choice 
         String message = "pick " +model.getMyId() +" " +choice;
@@ -242,28 +239,7 @@ public class Controller{
         
         for(int i = 0; i<players; i++){
         model.addScore(i, points[i]);       
-        }
-
-        
-        //model.addScore(0, 2);
-        //model.addScore(1, 1);
-        
-        
-        /*
-        int players = model.getPlayerCount();
-        String[] choice = new String[players];
-        int[] score = new int[players];
-        for (int i = 0; i<players; i++){
-            choice[i]=model.getPlayerChoice(i);
-        }
-        
-        if(choice[0].equals(choice[1])){
-            score[0]++;
-            score[1]++;
-        }else if(choice[0].equals("rock") &&  choice[1]){
-            score[0]
-        }
-        */      
+        }     
         reset();
         
     }

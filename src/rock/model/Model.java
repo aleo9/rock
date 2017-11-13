@@ -87,6 +87,10 @@ public class Model {
         return player[id].getChoice();
     }
     
+    public String getPlayerLastChoice(int id){
+        return player[id].getLastChoice();
+    }
+    
     public void registerChoice(int id, String choice){
         player[id].setHasPicked(true);
         player[id].registerChoice(choice);

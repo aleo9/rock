@@ -4,29 +4,55 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.*;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
 public class Matchmaker implements Runnable{
 
     Queue<String> queuedPlayers;
     private DatagramSocket socket;
     private boolean running;
-    int port = 999;
-    int playersPerGame = 3;
+    private int port = 999;
+    private int playersPerGame = 3;
+    private InetAddress inet;
+    private String myIp;
+    //String globalIp = "";
+    //boolean local = true;
     
     public Matchmaker(){
-    queuedPlayers = new LinkedList<>();
+        
+        queuedPlayers = new LinkedList<>();
+        
     
     }
     
     public int bind(int port){
+        
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("What port do you want to use? : ");
+	port = Integer.parseInt(scanner.nextLine());
+  		
+        System.out.print("How many players per game? ");
+	playersPerGame = Integer.parseInt(scanner.nextLine()); 
+        
+        try{
+            inet = InetAddress.getLocalHost();
+            myIp = inet.getHostAddress();
+            System.out.println("my ip " +myIp +" port " +port);
+            }catch(UnknownHostException e){
+            }
+        
         try{
             this.socket = new DatagramSocket(port);
             
         }catch (SocketException e){
-            System.out.println("failed to set socket to port 999");
+            System.out.println("failed to set socket to port " +port);
         }
+        
+           
+ 
                 return port;
     }
     
@@ -112,7 +138,7 @@ public class Matchmaker implements Runnable{
         
         public void send(InetSocketAddress address, String message) throws IOException{
 		byte[] buffer = message.getBytes();
-		
+		System.out.println(message);
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 		packet.setSocketAddress(address);
 		this.socket.send(packet);
@@ -161,6 +187,7 @@ public class Matchmaker implements Runnable{
         public static void main(String[] args){
         Matchmaker m = new Matchmaker();
         m.start();
+        
         }
     
     

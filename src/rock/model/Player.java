@@ -19,9 +19,7 @@ public class Player {
     private int lastScore = 0;
     private boolean hasPicked = false;
     private String choice;
-    //private static final String ROCK = "rock";
-    //private static final String PAPER = "paper";
-    //private static final String SCISSOR = "scissor";
+    private String lastChoice = "";
     
     
     public Player(){
@@ -37,12 +35,17 @@ public class Player {
         return this.choice;
     }
     
+    public String getLastChoice(){
+        return this.lastChoice;
+    }
+    
     public void registerChoice(String pick){
         this.hasPicked = true;
         this.choice = pick;
     }
     
     public void resetRound(){
+        this.lastChoice = choice;
         this.hasPicked = false;
         this.choice = null;
     }

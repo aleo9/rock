@@ -18,16 +18,29 @@ import java.io.IOException;
  */
 public class RPS extends Application {
  
-        
+    Scene intro;
+    Scene scene;
+    Stage stage;
+    
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("view/RPSFXML.fxml"));
-        Scene scene = new Scene(root);
+        //Parent root = FXMLLoader.load(getClass().getResource("view/RPSFXML.fxml"));
+        //scene = new Scene(root);
         
+        //Parent root2 = FXMLLoader.load(getClass().getResource("view/RPSFXML.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/startupFXML.fxml"));
+        scene = new Scene(root);
+        //root2.getController
+        //root2.getController().setParent(this);
         stage.setScene(scene);
+        //stage.setScene(scene);
         stage.show();
-       
-        
+  
+    }
+    
+    public void changeToGameView(){
+        //this.stage.setScene(scene);
+        //stage.show();
     }
     
     public void sendInput(){
