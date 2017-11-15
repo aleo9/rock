@@ -99,8 +99,6 @@ public class RPSFXMLController implements Initializable, Updater {
         Platform.runLater(new Runnable() {
         @Override public void run() {
               
-            //some update message
-            //
             
             p1score.setText(Integer.toString(controller.getScore(0)));
             p2score.setText(Integer.toString(controller.getScore(1)));
@@ -172,7 +170,6 @@ public class RPSFXMLController implements Initializable, Updater {
         try {
         controller = new Controller();
         connectUpdaterInterface(controller);
-        System.out.println("controller set");
         disableButtons(true);
         
         }catch(Exception e) {

@@ -8,6 +8,7 @@ package rock.controller;
 import rock.Net.Net;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.concurrent.CompletableFuture;
 import rock.model.Model;
 import rock.Updater;
 
@@ -43,7 +44,6 @@ public class Controller{
     }
     
     public void interpretMessage(String message){
-        
         //format of messages
         //
         //user messages
@@ -53,6 +53,8 @@ public class Controller{
         //server/matchmaker messages
         //server setup a game between 2-3 players - setup playercount yourid player1ip player1port player2ip player2port (player3ip player3port)
         //id is given to player, assigned by matchmaker
+        
+        CompletableFuture.runAsync(() -> {
         
         String[] arr = message.split(" ");    
         //int messageLength = arr.length;
@@ -83,6 +85,7 @@ public class Controller{
                 //tells FXMLController how many players there are and your id.
                 updater.connected(playerCount, model.getMyId());
             }
+        }); //end CompleteableFuture
         
     }
     

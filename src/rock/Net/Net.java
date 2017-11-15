@@ -5,17 +5,12 @@
  */
 package rock.Net;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import static java.lang.System.in;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
 import java.net.SocketException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import rock.controller.Controller;
 
@@ -29,13 +24,9 @@ public class Net implements Runnable
         
         private String myIp = "localhost";
         private InetAddress inet;
-        //public InetSocketAddress address = new InetSocketAddress("192.168.1.75", 1001);
-        
-        //this information may need to be changed to match the computer running the matchmaker server application.
-        //localhost is fine 
-        //public InetSocketAddress server = new InetSocketAddress("localhost", 999);
         public InetSocketAddress server;
         private int userPort = 1000;
+        
         public void setMyController(Controller c){
             this.myController = c;
         }
@@ -107,7 +98,7 @@ public class Net implements Runnable
 				socket.receive(packet);
 				
 				String msg = new String(buffer, 0, packet.getLength());
-                                System.out.println(msg);
+                                
 				myController.interpretMessage(msg);
 			} 
 			catch (IOException e){
@@ -117,11 +108,13 @@ public class Net implements Runnable
 	}
 
         public void send(InetSocketAddress address, String message) throws IOException{
-            
+                Thread send = new Thread(this);
+                send.start();
 		byte[] buffer = message.getBytes();
 		
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 		packet.setSocketAddress(address);
 		getSocket().send(packet);
+                
 	}
 }

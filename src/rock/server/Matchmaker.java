@@ -18,24 +18,14 @@ public class Matchmaker implements Runnable{
     private int playersPerGame = 3;
     private InetAddress inet;
     private String myIp;
-    //String globalIp = "";
-    //boolean local = true;
     
     public Matchmaker(){
         
         queuedPlayers = new LinkedList<>();
         
-    
     }
     
     public int bind(int port){
-        
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("What port do you want to use? : ");
-	port = Integer.parseInt(scanner.nextLine());
-  		
-        System.out.print("How many players per game? ");
-	playersPerGame = Integer.parseInt(scanner.nextLine()); 
         
         try{
             inet = InetAddress.getLocalHost();
@@ -51,9 +41,7 @@ public class Matchmaker implements Runnable{
             System.out.println("failed to set socket to port " +port);
         }
         
-           
- 
-                return port;
+                    return port;
     }
     
     @Override
@@ -68,18 +56,23 @@ public class Matchmaker implements Runnable{
 		interpretMessage(message);
                     if(enoughPlayers()){
                         setupGame();
-                        
                     }
 				
 		} 
             catch (IOException e){
 				break;
 		}
-		
         }
     }
           
     public void start(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("What port do you want to use? : ");
+	port = Integer.parseInt(scanner.nextLine());
+  		
+        System.out.print("How many players per game? ");
+	playersPerGame = Integer.parseInt(scanner.nextLine()); 
+        
         this.bind(port);
 	Thread thread = new Thread(this);
 	thread.start();
@@ -90,12 +83,15 @@ public class Matchmaker implements Runnable{
 	running = false;
 	socket.close();
     }
+
         
     private boolean enoughPlayers(){
             return (checkQueueCount() >= playersPerGame);
     }
         
-    private void setupGame(){
+private void setupGame(){
+        Thread setup = new Thread(this);
+        setup.start();
         int count = queuedPlayers.size();
         
         //if there are more players in queue than allowed in one game
@@ -103,11 +99,11 @@ public class Matchmaker implements Runnable{
             count=playersPerGame;
         }
             
-        InetSocketAddress[] address = new InetSocketAddress[count];
+            InetSocketAddress[] address = new InetSocketAddress[count];
         
-        //will be a string representation of the collective connection info for all players
-        //the players needs this info to contact eachother.
-        String playersConnection = "";
+            //will be a string representation of the collective connection info for all players
+            //the players need this info to contact eachother.
+            String playersConnection = "";
             
             //players are removed from queue while setting up a game for them.
             //if they leave a game and want to play again, they have to connect again.
@@ -137,16 +133,31 @@ public class Matchmaker implements Runnable{
     }
         
         public void send(InetSocketAddress address, String message) throws IOException{
+                Thread send = new Thread(this);
+                send.start();
+                
+                try{
 		byte[] buffer = message.getBytes();
 		System.out.println(message);
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 		packet.setSocketAddress(address);
 		this.socket.send(packet);
+
+                }catch(IOException e){
+                    
+                }
+                
+                
+                
                 System.out.println("game was setup");
+                
 	}
         
         public void interpretMessage(String message){
-        
+
+            //new thread so the main thread can continue listening for messages
+            Thread im = new Thread(this);
+            im.start();
         //format of messages
         //
         //user messages

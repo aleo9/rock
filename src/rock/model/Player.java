@@ -1,17 +1,6 @@
 package rock.model;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import java.net.InetSocketAddress;
 
-/**
- *
- * @author Alex
- */
 public class Player {
     
     private InetSocketAddress address;
@@ -19,7 +8,7 @@ public class Player {
     private int lastScore = 0;
     private boolean hasPicked = false;
     private String choice;
-    private String lastChoice = "";
+    private String lastChoice = ""; //set to "", so it doesn't print out null on round 1.
     
     
     public Player(){
