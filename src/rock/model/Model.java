@@ -5,15 +5,10 @@ public class Model {
     
     private int playerCount;
     private int myId;
-    
-    //Player[] player = new Player[3];
-    Player[] player;
+    private Player[] player;
     
     public Model(){
-        for(int i = 0; i<3; i++){
-            //player[i] = new Player();
-        }
-        playerCount = 3;
+
         
     }
     

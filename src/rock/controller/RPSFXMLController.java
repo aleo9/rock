@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package rock.controller;
 
 import java.io.IOException;
@@ -19,10 +14,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import rock.Updater;
 
-/**
- *
- * @author Alex
- */
 public class RPSFXMLController implements Initializable, Updater {
     
     private static Controller controller;
@@ -199,6 +190,11 @@ public class RPSFXMLController implements Initializable, Updater {
             }
             newRound();
     }
+    //@FXML
+    //public void exitApplication(ActionEvent event) {
+    //Platform.exit();
+    //}
+    
     @Override
     public void newRound(){
         

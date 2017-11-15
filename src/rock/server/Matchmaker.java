@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 
 public class Matchmaker implements Runnable{
 
-    Queue<String> queuedPlayers;
+    private Queue<String> queuedPlayers;
     private DatagramSocket socket;
     private boolean running;
     private int port = 999;
@@ -158,26 +158,27 @@ private void setupGame(){
             //new thread so the main thread can continue listening for messages
             Thread im = new Thread(this);
             im.start();
-        //format of messages
-        //
-        //user messages
-        //ask server to connect to players - connect myip myport 
-        //send your choice to players - pick playerid choice 
-        //
-        //server/matchmaker messages
-        //server setup a game between 2-3 players - setup playercount yourid player1ip player1port player2ip player2port (player3ip player3port)
-        //id is given to player, assigned by matchmaker
         
-        String[] arr = message.split(" ");    
-        //int messageLength = arr.length;
-        //String command = arr[0];
+            //format of messages
+            //
+            //user messages
+            //ask server to connect to players - connect myip myport 
+            //send your choice to players - pick playerid choice 
+            //
+            //server/matchmaker messages
+            //server setup a game between 2-3 players - setup playercount yourid player1ip player1port player2ip player2port (player3ip player3port)
+            //id is given to player, assigned by matchmaker
         
-        //when a connect message is received, the player is put in a queue for matchmaking.
-        if(arr[0].equals("connect")){
+            String[] arr = message.split(" ");    
+            //int messageLength = arr.length;
+            //String command = arr[0];
+        
+            //when a connect message is received, the player is put in a queue for matchmaking.
+            if(arr[0].equals("connect")){
             
-            String connectionInfo = arr[1] +" " + arr[2];   //info - ip port
-            System.out.println("playerinfo received " +connectionInfo);
-            addToQueue(connectionInfo);
+                String connectionInfo = arr[1] +" " + arr[2];   //info - ip port
+                System.out.println("playerinfo received " +connectionInfo);
+                addToQueue(connectionInfo);
             }
         
         }

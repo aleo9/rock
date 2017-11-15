@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package rock.Net;
 
 import java.io.IOException;
@@ -58,7 +54,7 @@ public class Net implements Runnable
             
             boolean foundPort = false;
             int counter = 0;
-            while(!foundPort && counter<20){//counter that tests 20 ports, to prevent infinite loop.
+            while(!foundPort && counter<20){//counter that tests 20 ports in order from 1000.
                 
                 try{
 		this.socket = new DatagramSocket(userPort);

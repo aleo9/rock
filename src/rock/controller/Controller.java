@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package rock.controller;
 
 import rock.Net.Net;
@@ -11,12 +6,6 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.CompletableFuture;
 import rock.model.Model;
 import rock.Updater;
-
-
-/**
- *
- * @author Alex
- */
 
 public class Controller{
     Model model;
@@ -69,8 +58,6 @@ public class Controller{
         }else if(arr[0].equals("setup")){
             
             int playerCount = Integer.parseInt(arr[1]);
-            //model.setPlayerCount(players);
-            //model.setMyId(Integer.parseInt(arr[2]));
             
             InetSocketAddress[] connections = new InetSocketAddress[playerCount];
             
@@ -254,12 +241,13 @@ public class Controller{
     
     public boolean haveAllInputs(){
         boolean all = true;
+        //assumed to have all inputs. If you find anyone without inputs, it's set to false. Then returned.
         for(int i = 0; i<model.getPlayerCount(); i++){
             
             if(!(model.hasPicked(i))){
                 
                 all = false;
-                //break;
+                
             }
         }
         
